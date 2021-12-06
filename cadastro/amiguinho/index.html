@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+    <head>
+   
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+        <script src="../../server/firebase.js"></script>
+        <script src="../../server/database.js"></script>
+        <script defer src="index.js"></script>
+    
+   
+        <link rel="stylesheet" type="text/css" href="../../css/formulario.css" media="screen">
+
+     
+        <title>Cadastro</title>
+    </head>
+
+    <body>  
+
+        <div class="banner">
+            <video src="../../img/background.mp4" autoplay muted loop type="mp4"> </video>
+        
+        <div>
+            <h1 id="titulo" align="center">Novo Amiguinho</h1>
+            <p id="subtitulo" align="center">Insira suas informações</p>
+            <br>
+        </div>
+
+   
+        <form>
+          <div class="campo" align="center">
+                <label for="nome"><strong>Nome do Amiguinho</strong></label>
+                <input type="text" name="nome" id="nome" required>
+           </div><br><br>
+
+            <div class="campo" align="center">
+                <label for="nome-mae"><strong>Nome da mãe</strong></label>
+                <input type="text" name="nome-mae" id="nome-mae" required>
+            </div><br><br>
+
+            <div class="campo" align="center">
+                <label for="telefone-mae"><strong>Telefone da mãe</strong></label>
+                <input type="text" name="telefone-mae" id="telefone-mae" required>
+            </div><br><br>
+
+            <div class="campo" align="center">
+                <label for="endereco"><strong>Endereço</strong></label>
+                <input type="text" name="endereco" id="endereco" required>
+            </div><br><br>
+
+            <div class="campo" align="center">
+                <label for="idade"><strong>Idade do Amiguinho</strong></label>
+                <input type="text" name="idade" id="idade" required>
+            </div><br><br><br>
+
+
+           <div align="center"> 
+            <a class="botao" type="submit" id="botao" onmouseenter ="Entrar()" onmouseout="Sair()">Concluir</a>            
+        </div>
+         
+        </form>
+      </div>
+       <script>
+        var bot = window.document.getElementById('botao')
+        function Entrar(){
+            bot.innerText = 'Cadastrar' 
+        }
+        function Sair(){
+            bot.innerText = 'Concluir'
+        }
+      </script>   
+    </body>
+</html>
+
+
+
+
+
