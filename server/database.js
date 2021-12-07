@@ -58,8 +58,6 @@ class Database {
             });
     }
 
-
-
     */
     register_friend(...userData) {
         const [ name, motherName, motherPhone, address, birthday ] = userData;
@@ -86,7 +84,7 @@ class Database {
                     'nome_mae': motherName,
                     'telefone_mae': motherPhone,
                     'endereco': address,
-                    'aniversario_amiguinho': birthday
+                    'aniversario_amiguinho': Number.parseInt(birthday)
                 })
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
@@ -108,19 +106,19 @@ class Database {
         this.db.collection("revista").add({
             'nome': name,
             'categoria': type,
-            'numero_colecao': collectionNumber,
-            'caixa': storedAtBox,
+            'numero_colecao': Number.parseInt(collectionNumber),
+            'caixa': Number.parseInt(storedAtBox)
         })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
+            const ref = this.db.collection("caixa").doc('XKlXdCBtgBRzxXR3vZ4Q');
+            const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
-            const ref = this.db.collection("caixa").where('numero', '==', storedAtBox);
-
-            ref.set({
-                'revistas_guardadas': this.db.FieldValue.arrayUnion(docRef.id)
-            }, { merge: true })
+            ref.update({
+                'revistas_guardadas': arrayUnion(docRef.id)
+            })
             .then(() => {
-                console.log("stored at box ", storedAtBox);
+                console.log('stored in box ' + storedAtBox);
             })
             .catch((error) => {
                 console.log('error to update maganize into box');
@@ -134,6 +132,47 @@ class Database {
         });
     }
 
+    register_box(...boxData){
+        const [ color, tags, number] = boxData;
+
+        this.db.collection("caixa").add({
+            'cor': color,
+            'etiquetas': tags,
+            'numero': Number.parseInt(number),
+            'revistas_guardadas': []
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+            this.successFc();
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+            this.errorFc();
+        });
+    }
+
+    register_loan(...loanData){
+        const [ friendId, magazineId, loanDate, returnDate ] = loanData;
+
+        this.db.collection("emprestimos").add({
+            'amiguinho': friendId,
+            'revistas': [
+                {
+                'revista': magazineId,
+                'data_emprestimo': loanDate,
+                'data_devolucao': returnDate
+                }
+            ]
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+            this.successFc();
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+            this.errorFc();
+        });
+    }
 
     /*
     update(docID, ...userData){
