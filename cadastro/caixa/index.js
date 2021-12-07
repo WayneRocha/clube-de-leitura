@@ -1,18 +1,40 @@
 (() => {
+    const db = new Database();
+    const colorMap = {
+        1: {
+            hex:'FFC759',
+            label: 'amarelo'
+        },
+        2: {
+            hex:'FF7B9C',
+            label: 'salmão'
+        },
+        3: {
+            hex:'607196',
+            label: 'cinza'
+        },
+        4: {
+            hex:'BABFD1',
+            label: 'cinza bègue'
+        },
+        5: {
+            hex:'E8E9ED',
+            label: 'branco areia'
+        }
+    };
 
     document.getElementById('botao').addEventListener('click', () => {
-        const colorMap = {
-            1: 'FFC759',
-            2: 'FF7B9C',
-            3: '607196',
-            4: 'BABFD1',
-            5: 'E8E9ED'
-        };
-        const color = colorMap[document.getElementById('cor').value] || 3;
+        const selectElement = document.getElementById('cor');
+        const color = colorMap[selectElement.value].hex;
         const tags = document.getElementById('etiquetas').value.split(',');
         const number = document.getElementById('numero').value;
-        const db = new Database();
+        console.log(color, tags, number);
 
         db.register_box(color, tags, number);
     });
+
+    Object.entries(colorMap).forEach((color, index) => {
+        document.getElementById('cor').innerHTML += `<option value="${index + 1}">${color[1].label}</option>`;
+    });
+    document.querySelector('#cor > option:nth-child(1)').setAttribute('selected', '');
 })();

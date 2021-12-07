@@ -1,4 +1,5 @@
 (() => {
+    const db = new Database();
 
     document.getElementById('botao').addEventListener('click', () => {
         const friendId = document.getElementById('amiguinho').value;
@@ -11,8 +12,24 @@
             const elValue = document.getElementById('data-devolucao').value;
             return new Date(elValue).getTime();
         })();
-        const db = new Database();
 
-        db.register_loan("P0j2kbDe2ZHZ9ZFfnARd", "ndgH0n4Vim0fLeHejgCM", loanDate, returnDate);
+        db.register_loan(friendId, magazineId, loanDate, returnDate);
+    });
+
+    db.getFriendsArray().then(data => {
+        const select = document.getElementById('amiguinho');
+        data.forEach(friend => {
+            const option = `<option value="${friend.id}">${friend.nome_amiguinho}</option>`;
+            select.innerHTML += option;
+        });
+        document.querySelector('#amiguinho > option:nth-child(1)').setAttribute('selected', '');
+    });
+    db.getMagazinesArray().then(data => {
+        const select = document.getElementById('revista');
+        data.forEach(magazine => {
+            const option = `<option value="${magazine.id}">${magazine.nome}</option>`;
+            select.innerHTML += option;
+        });
+        document.querySelector('#revista > option:nth-child(1)').setAttribute('selected', '');
     });
 })();

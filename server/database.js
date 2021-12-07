@@ -12,10 +12,10 @@ class Database {
     setErrorFc(callback){
         this.errorFc = callback;
     }
-    /*
-    getClient(docID){
+
+    getDocument(collection, docID){
         return new Promise((resolve, reject) => {
-            this.db.collection('agendamentos').doc(docID)
+            this.db.collection(collection).doc(docID)
                 .get()
                 .then((querySnapshot) => {
                     const client = querySnapshot.data();
@@ -30,17 +30,23 @@ class Database {
         }); 
     }
 
-    getClientsArray() {
+    GetAllDocumentsOf(collection){
         return new Promise((resolve, reject) => {
-            const clients = [];
-            this.db.collection("agendamentos").orderBy("name").limit(20)
+            const docArray = [];
+            const orderMap = {
+                'amiguinho': 'nome_amiguinho',
+                'caixa': 'numero',
+                'revista': 'nome',
+                'emprestimo': 'revistas'
+            }
+            this.db.collection(collection).orderBy(orderMap[collection])
                 .get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                        const client = {id: doc.id, ...doc.data()};
-                        clients.push(client);
+                        const document = {id: doc.id, ...doc.data()};
+                        docArray.push(document);
                     });
-                    resolve(clients);
+                    resolve(docArray);
                 })
                 .catch((error) => {
                     reject([]);
@@ -48,8 +54,8 @@ class Database {
         });
     }
 
-    deleteClient(docID) {
-        this.db.collection('agendamentos').doc(docID).delete()
+    deleteDocument(collection, docId) {
+        this.db.collection(collection).doc(docId).delete()
             .then(() => {
                 this.successFc();
             })
@@ -58,7 +64,22 @@ class Database {
             });
     }
 
-    */
+    getFriendsArray() {
+        return this.GetAllDocumentsOf('amiguinho');
+    }
+    
+    getMagazinesArray() {
+        return this.GetAllDocumentsOf('revista');
+    }
+
+    getBoxArray() {
+        return this.GetAllDocumentsOf('caixa');
+    }
+
+    getLoansArray() {
+        return this.GetAllDocumentsOf('emprestimos');
+    }
+
     register_friend(...userData) {
         const [ name, motherName, motherPhone, address, birthday ] = userData;
         const isEqualRegister = () => {
@@ -101,24 +122,24 @@ class Database {
     }
 
     register_magazine(...magazineData){
-        const [ name, collectionNumber, type, storedAtBox ] = magazineData;
+        const [ name, collectionNumber, type, storedBoxNumber, storedBoxId ] = magazineData;
 
         this.db.collection("revista").add({
             'nome': name,
             'categoria': type,
             'numero_colecao': Number.parseInt(collectionNumber),
-            'caixa': Number.parseInt(storedAtBox)
+            'caixa': Number.parseInt(storedBoxNumber)
         })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
-            const ref = this.db.collection("caixa").doc('XKlXdCBtgBRzxXR3vZ4Q');
+            const ref = this.db.collection("caixa").doc(storedBoxId);
             const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
             ref.update({
                 'revistas_guardadas': arrayUnion(docRef.id)
             })
             .then(() => {
-                console.log('stored in box ' + storedAtBox);
+                console.log('stored in box ' + storedBoxNumber);
             })
             .catch((error) => {
                 console.log('error to update maganize into box');
