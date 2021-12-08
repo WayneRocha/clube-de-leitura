@@ -37,4 +37,8 @@
         document.getElementById('cor').innerHTML += `<option value="${index + 1}">${color[1].label}</option>`;
     });
     document.querySelector('#cor > option:nth-child(1)').setAttribute('selected', '');
+    db.getNewBoxNumber()
+        .then(data => {
+            document.querySelector('#numero').value = data;
+        })
 })();
