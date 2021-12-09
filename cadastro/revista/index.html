@@ -5,6 +5,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="../../server/firebase.js"></script>
@@ -16,7 +17,7 @@
 </head>
 
 <body>
-
+    
     <div class="banner">
         <video src="../../img/background.mp4" autoplay muted loop type="mp4"></video>
         <div>
@@ -24,43 +25,37 @@
             <p id="subtitulo" align="center">Insira suas informações</p>
             <br>
         </div>
+        <div id="status-flag"></div>
+        <div class="campo" align="center">
+            <label for="nome"><strong>Nome da Revista</strong></label>
+            <input type="text" name="nome" id="nome" required>
+        </div><br><br>
+
+        <div class="campo" align="center">
+            <label for="numero-colecao"><strong>Número da coleção</strong></label>
+            <input type="text" name="numero-colecao" id="numero-colecao" required>
+        </div><br><br>
+
+        <div class="campo" align="center">
+            <label for="senioridade"><strong>Tipo de coleção</strong></label>
+            <select id="senioridade" required>
+                <option selected disabled value="">Selecione</option>
+                <option value="infantil">Infántil</option>
+                <option value="infanto-juvenil">Infanto Juvenil</option>
+                <option value="conto-de-fadas">Conto de Fadas</option>
+            </select>
+        </div><br><br>
+
+        <div class="campo" align="center">
+            <label for="storedBox"><strong>guardar na caixa</strong></label>
+            <select name="storedBox" id="storedBox" required>
+            </select>
+        </div><br><br>
 
 
-        <form>
-
-
-            <div class="campo" align="center">
-                <label for="nome"><strong>Nome da Revista</strong></label>
-                <input type="text" name="nome" id="nome" required>
-            </div><br><br>
-
-            <div class="campo" align="center">
-                <label for="numero-colecao"><strong>Número da coleção</strong></label>
-                <input type="text" name="numero-colecao" id="numero-colecao" required>
-            </div><br><br>
-
-            <div class="campo" align="center">
-                <label for="senioridade"><strong>Tipo de coleção</strong></label>
-                <select id="senioridade" required>
-                    <option selected disabled value="">Selecione</option>
-                    <option value="infantil">Infántil</option>
-                    <option value="infanto-juvenil">Infanto Juvenil</option>
-                    <option value="conto-de-fadas">Conto de Fadas</option>
-                </select>
-            </div><br><br>
-
-            <div class="campo" align="center">
-                <label for="storedBox"><strong>guardar na caixa</strong></label>
-                <select name="storedBox" id="storedBox" required>
-                </select>
-            </div><br><br>
-
-
-            <div align="center">
-                <a class="botao" type="submit" id="botao" onmouseenter="Entrar()" onmouseout="Sair()">Concluir</a>
-            </div>
-
-        </form>
+        <div align="center">
+            <a class="botao" type="submit" id="botao" onmouseenter="Entrar()" onmouseout="Sair()">Concluir</a>
+        </div>
     </div>
     <script>
         function Entrar() {

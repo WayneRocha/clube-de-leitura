@@ -1,8 +1,16 @@
 class Database {
     constructor(){
         this.db = firebase.firestore();
-        this.successFc = () => {};
-        this.errorFc = () => {};
+        this.successFc = () => showFlag({
+            successMessage: "Sucesso!",
+            successful: true,
+            element: document.querySelector('#status-flag')
+        });
+        this.errorFc = () => showFlag({
+            failMessage: "Ocorreu um erro!",
+            successful: false,
+            element: document.querySelector('#status-flag')
+        });
     }
 
     setSuccessFc(callback){
@@ -20,11 +28,9 @@ class Database {
                 .then((querySnapshot) => {
                     const client = querySnapshot.data();
                     console.log("Success to got Document!");
-                    this.successFc();
                     resolve(client);
                 })
                 .catch((error) => {
-                    this.errorFc();
                     console.error("Error geting document: ", error);
                 });
         }); 
@@ -85,18 +91,22 @@ class Database {
                 .where('nome_mae', '==', motherName)
                 .get()
                 .then((querySnapshot) => {
-                    let length = 0;
-                    querySnapshot.forEach((doc) => {
-                        length++;
-                    });
-                    resolve((length == 0) ? { 'exists': true } : { 'exists':  false});
+                    resolve({ 'exists': (querySnapshot.size == 0) });
                 })
         });
     }
 
     isMaganizeBerrowed(docId){
         return new Promise((resolve, reject) => {
-            this.db.collection('revista').where('')
+            /* this.db.collection('emprestimos').whereField('revistas.revista', 'isEqualTo', docId) */
+            this.db.collection('emprestimos').where('revistas.revista', '==', docId)
+            .get()
+            .then((querySnapshot) => {
+                resolve(querySnapshot.size > 0);
+            })
+            .catch(() => {
+                reject(false);
+            })
         });
     }
 
@@ -162,19 +172,22 @@ class Database {
     register_box(...boxData){
         const [ color, tags, number] = boxData;
 
-        this.db.collection("caixa").add({
-            'cor': color,
-            'etiquetas': tags,
-            'numero': Number.parseInt(number),
-            'revistas_guardadas': []
-        })
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
-            this.successFc();
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-            this.errorFc();
+        return new Promise((resolve, reject) => {
+            this.db.collection("caixa").add({
+                'cor': color,
+                'etiquetas': tags,
+                'numero': Number.parseInt(number),
+                'revistas_guardadas': []
+            })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                this.successFc();
+                resolve(docRef);
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                this.errorFc();
+            });
         });
     }
 
@@ -183,13 +196,11 @@ class Database {
 
         this.db.collection("emprestimos").add({
             'amiguinho': friendId,
-            'revistas': [
-                {
+            'revistas': {
                 'revista': magazineId,
                 'data_emprestimo': loanDate,
                 'data_devolucao': returnDate
-                }
-            ]
+            }
         })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
@@ -201,7 +212,6 @@ class Database {
         });
     }
 
-    
     update_friend(docId, ...userData) {
         const [ name, motherName, motherPhone, address, birthday ] = userData;
 
@@ -240,19 +250,6 @@ class Database {
         })
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
-            const ref = this.db.collection("caixa").doc(storedBoxId);
-            const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
-
-            ref.update({
-                'revistas_guardadas': arrayUnion(docRef.id)
-            })
-            .then(() => {
-                console.log('stored in box ' + storedBoxNumber);
-            })
-            .catch((error) => {
-                console.log('error to update maganize into box');
-                console.log(error);
-            });
             this.successFc();
         })
         .catch((error) => {
@@ -284,13 +281,11 @@ class Database {
 
         this.db.collection("emprestimos").doc(docId).update({
             'amiguinho': friendId,
-            'revistas': [
-                {
+            'revistas': {
                 'revista': magazineId,
                 'data_emprestimo': loanDate,
                 'data_devolucao': returnDate
-                }
-            ]
+            }
         })
         .then((docRef) => {
             this.successFc();
@@ -329,20 +324,18 @@ class Database {
     }
 
     deleteMagazine(docId){
-        
-        this.db.collection('emprestimos').where("amiguinho", "==", docId)
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                this.db.collection('emprestimos').doc(doc.id).delete().then(() => {
-                    console.log("Document successfully deleted!");
-                }).catch((error) => {
-                    console.error("Error removing document: ", error);
+        this.isMaganizeBerrowed(docId).then(isBerrowed => {
+            if (!isBerrowed){
+                this.db.collection('revista').doc(docId).delete()
+                .then(() => {
+                    console.log('success to delete');
+                })
+                .catch((error) => {
+                    console.log("Error to delete: ", error);
                 });
-            });
-        })
-        .catch((error) => {
-            console.log("Error getting documents: ", error);
+            } else {
+                console.log('revista esta emprestada');
+            }
         });
     }
 
@@ -351,30 +344,34 @@ class Database {
     }
 
     deleteBox(docId){
-
-    }
-
-    /*
-    update(docID, ...userData){
-        const [ name, phone, origin, contact_date, note ] = userData;
-
-        this.db.collection("agendamentos").doc(docID).update({
-            name: name,
-            phone: phone,
-            origin: origin,
-            contact_date: contact_date,
-            note: note
-        })
-        .then(() => {
-            console.log("Document successfully updated!");
-            this.successFc();
-        })
-        .catch((error) => {
-            console.error("Error updating document: ", error);
-            this.errorFc();
+        const storedMagazines = new Promise((resolve, reject) => {
+            this.db.collection('caixa').doc(docId)
+            .get()
+            .then((querySnapshot) => {
+                console.log(querySnapshot.data());
+                resolve((querySnapshot.data()).revistas_guardadas);
+            })
+            .catch(error => {
+                console.log(error);
+                reject([]);
+            })
         });
+
+        storedMagazines.then(maganizesArray => {
+            maganizesArray.forEach(magazineId => {
+                this.db.collection('revista').doc(magazineId).delete()
+                .then(() => {
+                    console.log('success to delete');
+                })
+                .catch((error) => {
+                    console.log("Error to delete: ", error);
+                });
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+        this.db.collection('caixa').doc(docId).delete();
     }
-
-    */
-
 }
