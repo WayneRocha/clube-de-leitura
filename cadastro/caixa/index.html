@@ -5,8 +5,11 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="../../statusFlag.js"></script>
     <script src="../../server/firebase.js"></script>
     <script src="../../server/database.js"></script>
     <script defer src="index.js"></script>
@@ -25,35 +28,30 @@
             <p id="subtitulo" align="center">Insira suas informações</p>
             <br>
         </div>
+        <div id="status-flag"></div>
+        <div class="campo" align="center">
+            <label for="cor"><strong>Cor da Caixa</strong></label>
+            <select name="cor" id="cor">
+
+            </select>
+        </div><br><br>
+
+        <div class="campo" align="center">
+            <label for="etiquetas"><strong>Etiquetas</strong></label>
+            <input type="text" name="etiquetas" id="etiquetas" required>
+
+        </div><br><br>
+        
+        <div class="campo" align="center">
+            <label for="numero"><strong>Número da Caixa</strong></label>
+            <input type="number" name="numero" id="numero" readonly>
+        </div><br><br>
 
 
-        <form>
-
-
-            <div class="campo" align="center">
-                <label for="cor"><strong>Cor da Caixa</strong></label>
-                <select name="cor" id="cor">
-
-                </select>
-            </div><br><br>
-
-            <div class="campo" align="center">
-                <label for="etiquetas"><strong>Etiquetas</strong></label>
-                <input type="text" name="etiquetas" id="etiquetas" required>
-
-            </div><br><br>
-            
-            <div class="campo" align="center">
-                <label for="numero"><strong>Número da Caixa</strong></label>
-                <input type="number" name="numero" id="numero" readonly>
-            </div><br><br>
-
-
-            <div align="center">
-                <a class="botao" type="submit" onsubmit="" id="botao" onmouseenter="Entrar()"
-                    onmouseout="Sair()">Concluir</a>
-            </div>
-        </form>
+        <div align="center">
+            <a class="botao" type="submit" onsubmit="" id="botao" onmouseenter="Entrar()"
+                onmouseout="Sair()">Concluir</a>
+        </div>
     </div>
     <script>
         function Entrar() {
