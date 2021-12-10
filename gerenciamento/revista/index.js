@@ -8,7 +8,7 @@
                 <h3 class="name">${magazine.nome}</h3>
                 <p class="born">Categoria: ${magazine.categoria}</p>
                 <p class="address">Coleção ${magazine.numero_colecao}</p>
-            </li>
+            </li> 
             `;
             parent.innerHTML += row;
         });

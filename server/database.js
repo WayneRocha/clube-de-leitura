@@ -27,13 +27,12 @@ class Database {
                 .get()
                 .then((querySnapshot) => {
                     const client = querySnapshot.data();
-                    console.log("Success to got Document!");
                     resolve(client);
                 })
                 .catch((error) => {
                     console.error("Error geting document: ", error);
                 });
-        }); 
+        });
     }
 
     getAllDocumentsOf(collection){
