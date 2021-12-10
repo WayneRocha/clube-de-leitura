@@ -1,16 +1,8 @@
 class Database {
     constructor(){
         this.db = firebase.firestore();
-        this.successFc = () => showFlag({
-            successMessage: "Sucesso!",
-            successful: true,
-            element: document.querySelector('#status-flag')
-        });
-        this.errorFc = () => showFlag({
-            failMessage: "Ocorreu um erro!",
-            successful: false,
-            element: document.querySelector('#status-flag')
-        });
+        this.successFc = () => {};
+        this.errorFc = () => {};
     }
 
     setSuccessFc(callback){

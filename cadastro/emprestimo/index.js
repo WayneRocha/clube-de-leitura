@@ -14,6 +14,14 @@
         })();
 
         db.register_loan(friendId, magazineId, loanDate, returnDate);
+
+        friendId.value = "";
+        magazineId.value = "";
+        loanDate.value = "";
+        returnDate.value = "";
+
+        showSwal('success-message');
+        
     });
 
     db.getFriendsArray().then(data => {

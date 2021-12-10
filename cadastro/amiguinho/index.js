@@ -12,5 +12,14 @@
         const db = new Database();
     
         db.register_friend(name, motherName, motherPhone, address, birthday);
+        
+        name.value = "";
+        motherName.value = "";
+        motherPhone.value = "";
+        address.value = "";
+        birthday.value = "";
+
+        showSwal('success-message');
+        
     });
 })();

@@ -31,6 +31,14 @@
         console.log(color, tags, number);
 
         db.register_box(color, tags, number);
+        
+        selectElement.value = "";
+        color.value = "";
+        tags.value = "";
+        number.value = "";
+
+        showSwal('success-message');
+        
     });
 
     Object.entries(colorMap).forEach((color, index) => {

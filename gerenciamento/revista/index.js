@@ -1,4 +1,4 @@
-(() => {
+(async () => {
     const db = new Database();
     const fillList = magazineArray => {
         const parent = document.querySelector('#magazines-list');
@@ -13,7 +13,6 @@
             parent.innerHTML += row;
         });
     }
-    db.getMagazinesArray().then(magazineArray => {
-        fillList(magazineArray);
-    });
+    const magazineArray = await db.getMagazinesArray();
+    fillList(magazineArray);
 })();

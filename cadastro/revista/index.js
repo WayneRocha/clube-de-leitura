@@ -10,6 +10,15 @@
         const boxId = selectBoxElement.options[selectBoxElement.selectedIndex].getAttribute('data-box-id');
 
         db.register_magazine(name, collectionNumber, type, box, boxId);
+        
+                
+        selectBoxElement.value = "";
+        name.value = "";
+        collectionNumber.value = "";
+        type.value = "";
+
+        showSwal('success-message');
+        
     });
 
     db.getBoxArray().then(data => {

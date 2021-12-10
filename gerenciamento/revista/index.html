@@ -3,100 +3,81 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="../../server/firebase.js"></script>
-    <script src="../../server/database.js"></script>
-    <script defer src="index.js"></script>
-    <link rel="stylesheet" href="../../css/formulario.css">
-    
-    <title>Gerenciamento</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="../../server/firebase.js"></script>
+  <script src="../../server/database.js"></script>
+  <script defer src="index.js"></script>
+  <link rel="stylesheet" href="../../css/formulario.css">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+
+
+  <title>Gerenciamento</title>
 </head>
 
 <body>
 
-    <div class="banner">
-        <video src="../img/background.mp4" autoplay muted loop type="mp4"> </video>
+  <div class="banner">
+    <video src="../img/background.mp4" autoplay muted loop type="mp4"> </video>
 
-        <div>
-            <h1 id="titulo" align="center">Gerenciamento de revistas</h1>
-            <p id="subtitulo" align="center">Procurar Cadastros</p>
-            <br>
-        </div>
+    <div>
+      <h1 id="titulo" align="center">Gerenciamento de revistas</h1>
+      <p id="subtitulo" align="center">Procurar Cadastros</p>
+      <br>
+    </div>
 
-        <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
-        <link rel="mask-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
-        <link rel="canonical" href="https://codepen.io/wmg481/pen/RRRKdm">
-      
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
-      
-        <style class="INLINE_PEN_STYLESHEET_ID">
 
+    <style class="INLINE_PEN_STYLESHEET_ID">
       body {
-          background: #000000;
-          color: white;
-      }      
-          .container {
+        background: #000000;
+        color: white;
+      }
+
+      .container {
         margin-top: 30px;
         margin-bottom: 30px;
       }
-      
+
       .list {
         list-style-type: none;
         padding: 0;
         margin: 0;
       }
-      
+
       .list--list-item {
         padding-bottom: 20px;
         margin-bottom: 20px;
         border-bottom: 1px solid rgb(212, 0, 255);
       }
+
       .list--list-item:last-child {
         border-bottom: 0;
         margin: 0;
       }
-      
+
       .no-result {
         display: none;
       }
-        </style>
-      
-      <script src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeRefreshCSS-4793b73c6332f7f14a9b6bba5d5e62748e9d1bd0b5c52d7af6376f3d1c625d7e.js"></script>
-      <script src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeRuntimeErrors-4f205f2c14e769b448bcf477de2938c681660d5038bc464e3700256713ebe261.js"></script>
-      </head>
-      
-      <body>
-        <div class="container">
-          <div class="row">
-              <div id="users" class="col-xs-12">
-                  <div class="filter-group row">
-                      <div class="form-group col-xs-12 col-sm-12 col-md-4">
-                          <input type="text" class="search form-control" placeholder="Search">
-                      </div>
-                  </div>
-                  <ul class="list" id="magazines-list">
-                  </ul>
-                  <div class="no-result">No Results</div>
-                  <ul class="pagination"></ul>
-              </div>
+    </style>
+    <div class="container">
+      <div class="row">
+        <div id="users" class="col-xs-12">
+          <div class="filter-group row">
+            <div class="form-group col-xs-12 col-sm-12 col-md-4">
+              <input type="text" class="search form-control" placeholder="Search">
+            </div>
           </div>
+          <ul class="list" id="magazines-list">
+          </ul>
+          <div class="no-result">No Results</div>
+          <ul class="pagination"></ul>
+        </div>
       </div>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-        
-      <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
-      <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.js"></script>
-      
-      
-      
+    </div>
 </body>
 
 </html>

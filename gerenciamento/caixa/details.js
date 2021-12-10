@@ -14,8 +14,9 @@
     const fillList = async magazinesIds => {
         for (const magazineId of magazinesIds){
             const magazine = await db.getDocument('revista', magazineId);
+            console.log(magazine);
             const row = `
-            <li class="list--list-item" data-magazine-id="${magazine.id}">
+            <li class="list--list-item" data-magazine-id="${magazineId}">
                 <h3 class="name">${magazine.nome}</h3>
                 <p class="born">Categoria: ${magazine.categoria}</p>
                 <p class="address">Coleção ${magazine.numero_colecao}</p>
