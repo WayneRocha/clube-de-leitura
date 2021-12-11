@@ -102,104 +102,119 @@ class Database {
     }
 
     register_friend(...userData) {
-        const [ name, motherName, motherPhone, address, birthday ] = userData;
-
-        this.isEqualFriends(name, motherName).then(({exists}) => {
-            if (exists) {
-                this.db.collection("amiguinho").add({
-                    'nome_amiguinho': name,
-                    'nome_mae': motherName,
-                    'telefone_mae': motherPhone,
-                    'endereco': address,
-                    'aniversario_amiguinho': Number.parseInt(birthday)
-                })
-                .then((docRef) => {
-                    console.log("Document written with ID: ", docRef.id);
-                    this.successFc();
-                })
-                .catch((error) => {
-                    console.error("Error adding document: ", error);
-                    this.errorFc();
-                });
-            } else {
-                console.log('ja existe');
-                this.errorFc();
-            }
-        })
-    }
-
-    register_magazine(...magazineData){
-        const [ name, collectionNumber, type, storedBoxNumber, storedBoxId ] = magazineData;
-
-        this.db.collection("revista").add({
-            'nome': name,
-            'categoria': type,
-            'numero_colecao': Number.parseInt(collectionNumber),
-            'caixa': Number.parseInt(storedBoxNumber)
-        })
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
-            const ref = this.db.collection("caixa").doc(storedBoxId);
-            const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
-
-            ref.update({
-                'revistas_guardadas': arrayUnion(docRef.id)
-            })
-            .then(() => {
-                console.log('stored in box ' + storedBoxNumber);
-            })
-            .catch((error) => {
-                console.log('error to update maganize into box');
-                console.log(error);
+        return new Promise((resolve, reject) => {
+            const [ name, motherName, motherPhone, address, birthday ] = userData;
+    
+            this.isEqualFriends(name, motherName).then(({exists}) => {
+                if (exists) {
+                    this.db.collection("amiguinho").add({
+                        'nome_amiguinho': name,
+                        'nome_mae': motherName,
+                        'telefone_mae': motherPhone,
+                        'endereco': address,
+                        'aniversario_amiguinho': Number.parseInt(birthday)
+                    })
+                    .then((docRef) => {
+                        console.log("Document written with ID: ", docRef.id);
+                        resolve(docRef);
+                        this.successFc();
+                    })
+                    .catch((error) => {
+                        console.error("Error adding document: ", error);
+                        reject(undefined);
+                        this.errorFc();
+                    });
+                } else {
+                    console.log('ja existe');
+                    reject(undefined);
+                }
             });
-            this.successFc();
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-            this.errorFc();
         });
     }
 
-    register_box(...boxData){
-        const [ color, tags, number] = boxData;
-
+    register_magazine(...magazineData){
         return new Promise((resolve, reject) => {
-            this.db.collection("caixa").add({
-                'cor': color,
-                'etiquetas': tags,
-                'numero': Number.parseInt(number),
-                'revistas_guardadas': []
+            const [ name, collectionNumber, type, storedBoxNumber, storedBoxId ] = magazineData;
+    
+            this.db.collection("revista").add({
+                'nome': name,
+                'categoria': type,
+                'numero_colecao': Number.parseInt(collectionNumber),
+                'caixa': Number.parseInt(storedBoxNumber)
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
+                const ref = this.db.collection("caixa").doc(storedBoxId);
+                const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+    
+                ref.update({
+                    'revistas_guardadas': arrayUnion(docRef.id)
+                })
+                .then(() => {
+                    console.log('stored in box ' + storedBoxNumber);
+                    resolve(docRef);
+                })
+                .catch((error) => {
+                    console.log('error to update maganize into box');
+                    reject(undefined);
+                });
                 this.successFc();
-                resolve(docRef);
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
                 this.errorFc();
             });
+
+        });
+    }
+
+    register_box(...boxData){
+        return new Promise((resolve, reject) => {
+            const [ color, tags, number] = boxData;
+    
+            return new Promise((resolve, reject) => {
+                this.db.collection("caixa").add({
+                    'cor': color,
+                    'etiquetas': tags,
+                    'numero': Number.parseInt(number),
+                    'revistas_guardadas': []
+                })
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    this.successFc();
+                    resolve(docRef);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    reject(undefined);
+                    this.errorFc();
+                });
+            });
         });
     }
 
     register_loan(...loanData){
-        const [ friendId, magazineId, loanDate, returnDate ] = loanData;
-
-        this.db.collection("emprestimos").add({
-            'amiguinho': friendId,
-            'revistas': {
-                'revista': magazineId,
-                'data_emprestimo': loanDate,
-                'data_devolucao': returnDate
-            }
-        })
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
-            this.successFc();
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-            this.errorFc();
+        return new Promise((resolve, reject) => {
+            const [ friendId, magazineId, loanDate, returnDate ] = loanData;
+    
+            this.db.collection("emprestimos").add({
+                'amiguinho': friendId,
+                'revistas': {
+                    'revista': magazineId,
+                    'data_emprestimo': loanDate,
+                    'data_devolucao': returnDate
+                }
+            })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                resolve(docRef);
+                this.successFc();
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                reject(undefined);
+                this.errorFc();
+            });
         });
     }
 

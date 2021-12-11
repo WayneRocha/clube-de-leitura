@@ -1,6 +1,6 @@
-(() => {
+(async () => {
 
-    document.getElementById('botao').addEventListener('click', () => {
+    document.getElementById('botao').addEventListener('click', async () => {
         const name = document.getElementById('nome').value;
         const motherName = document.getElementById('nome-mae').value;
         const motherPhone = document.getElementById('telefone-mae').value;
@@ -11,7 +11,8 @@
         })();
         const db = new Database();
     
-        db.register_friend(name, motherName, motherPhone, address, birthday);
+        const friendDocId = await db.register_friend(name, motherName, motherPhone, address, birthday);
+        
         
         name.value = "";
         motherName.value = "";
@@ -19,7 +20,7 @@
         address.value = "";
         birthday.value = "";
 
-        showSwal('success-message');
+        showSwal((friendDocId) ? 'success-message' : 'error-message');
         
     });
 })();

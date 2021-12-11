@@ -1,7 +1,7 @@
-(() => {
+(async () => {
     const db = new Database();
 
-    document.getElementById('botao').addEventListener('click', () => {
+    document.getElementById('botao').addEventListener('click', async () => {
         const friendId = document.getElementById('amiguinho').value;
         const magazineId = document.getElementById('revista').value;
         const loanDate = (() => {
@@ -13,14 +13,14 @@
             return new Date(elValue).getTime();
         })();
 
-        db.register_loan(friendId, magazineId, loanDate, returnDate);
+        const loanRefId = await db.register_loan(friendId, magazineId, loanDate, returnDate);
 
         friendId.value = "";
         magazineId.value = "";
         loanDate.value = "";
         returnDate.value = "";
 
-        showSwal('success-message');
+        showSwal((loanRefId) ? 'success-message' : 'error-message');
         
     });
 

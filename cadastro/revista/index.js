@@ -1,7 +1,7 @@
-(() => {
+(async () => {
     const db = new Database();
 
-    document.getElementById('botao').addEventListener('click', () => {
+    document.getElementById('botao').addEventListener('click', async () => {
         const selectBoxElement = document.getElementById('storedBox');
         const name = document.getElementById('nome').value;
         const collectionNumber = document.getElementById('numero-colecao').value;
@@ -9,7 +9,7 @@
         const box = selectBoxElement.value;
         const boxId = selectBoxElement.options[selectBoxElement.selectedIndex].getAttribute('data-box-id');
 
-        db.register_magazine(name, collectionNumber, type, box, boxId);
+        const magazineRefId = await db.register_magazine(name, collectionNumber, type, box, boxId);
         
                 
         selectBoxElement.value = "";
@@ -17,7 +17,7 @@
         collectionNumber.value = "";
         type.value = "";
 
-        showSwal('success-message');
+        showSwal((magazineRefId) ? 'success-message' : 'error-message');
         
     });
 

@@ -1,4 +1,4 @@
-(() => {
+(async () => {
     const db = new Database();
     const colorMap = {
         1: {
@@ -23,21 +23,21 @@
         }
     };
 
-    document.getElementById('botao').addEventListener('click', () => {
+    document.getElementById('botao').addEventListener('click', async () => {
         const selectElement = document.getElementById('cor');
         const color = colorMap[selectElement.value].hex;
         const tags = document.getElementById('etiquetas').value.split(',');
         const number = document.getElementById('numero').value;
         console.log(color, tags, number);
 
-        db.register_box(color, tags, number);
+        const boxRefId = await db.register_box(color, tags, number);
         
         selectElement.value = "";
         color.value = "";
         tags.value = "";
         number.value = "";
 
-        showSwal('success-message');
+        showSwal((boxRefId) ? 'success-message' : 'error-message');
         
     });
 
