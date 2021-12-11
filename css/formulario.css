@@ -137,6 +137,11 @@ input, select {
 	pointer-events: none;
 }
 
+.list--list-item{
+	padding: 20px;
+}
+
 .list--list-item:hover{
 	background-color: rgba(36, 23, 23, 0.337);
+	transition: ease-in-out .2s;
 }
