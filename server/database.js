@@ -115,7 +115,7 @@ class Database {
                     })
                         .then((docRef) => {
                             console.log("Document written with ID: ", docRef.id);
-                            resolve(docRef);
+                            resolve(1);
                             this.successFc();
                         })
                         .catch((error) => {
@@ -170,25 +170,22 @@ class Database {
     register_box(...boxData) {
         return new Promise((resolve, reject) => {
             const [color, tags, number] = boxData;
-
-            return new Promise((resolve, reject) => {
-                this.db.collection("caixa").add({
-                    'cor': color,
-                    'etiquetas': tags,
-                    'numero': Number.parseInt(number),
-                    'revistas_guardadas': []
+            this.db.collection("caixa").add({
+                'cor': color,
+                'etiquetas': tags,
+                'numero': Number.parseInt(number),
+                'revistas_guardadas': []
+            })
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    this.successFc();
+                    resolve(1);
                 })
-                    .then((docRef) => {
-                        console.log("Document written with ID: ", docRef.id);
-                        this.successFc();
-                        resolve(docRef);
-                    })
-                    .catch((error) => {
-                        console.error("Error adding document: ", error);
-                        reject(undefined);
-                        this.errorFc();
-                    });
-            });
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    reject(undefined);
+                    this.errorFc();
+                });
         });
     }
 
@@ -206,7 +203,7 @@ class Database {
             })
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
-                    resolve(docRef);
+                    resolve(1);
                     this.successFc();
                 })
                 .catch((error) => {
@@ -249,11 +246,13 @@ class Database {
                 'numero_colecao': Number.parseInt(collectionNumber),
             })
                 .then(() => {
+                    resolve(1);
                     this.successFc();
                 })
                 .catch((error) => {
                     console.error("Error adding document: ", error);
                     this.errorFc();
+                    reject
                 });
         });
     }
@@ -292,9 +291,11 @@ class Database {
                 }
             })
                 .then((docRef) => {
+                    resolve(1);
                     this.successFc();
                 })
                 .catch((error) => {
+                    reject();
                     this.errorFc();
                 });
         });
