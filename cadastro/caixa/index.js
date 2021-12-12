@@ -37,7 +37,9 @@
         tags.value = "";
         number.value = "";
 
-        showSwal((boxRefId) ? 'success-message' : 'error-message');
+        console.log(boxRefId);
+
+        showSwal(((boxRefId != undefined) ? 'success-message' : 'error-message'), 'Caixa Cadastrada!');
         
     });
 

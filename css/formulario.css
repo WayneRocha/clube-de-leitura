@@ -145,3 +145,26 @@ input, select {
 	background-color: rgba(36, 23, 23, 0.337);
 	transition: ease-in-out .2s;
 }
+
+.bx {
+	font-size: 2rem;
+}
+.bxs-trash:hover, .bxs-edit-alt {
+	transition: ease-in-out .2s;
+}
+.bxs-trash:hover{
+	color: rgb(238, 12, 12);
+}
+.bxs-edit-alt:hover{
+	color: rgb(0, 144, 253);
+}
+.modal-body, .modal-body label, .modal-title {
+	color: #000;
+}
+.list:empty::after {
+	content: "não há nada aqui";
+	font-size: larger;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

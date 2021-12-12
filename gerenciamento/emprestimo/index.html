@@ -13,10 +13,13 @@
   <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-  
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+  <script src="../../showSwal.js"></script>
+  <script defer src="index.js"></script>
   <link rel="stylesheet" type="text/css" href="../../css/formulario.css" media="screen">
 </head>
 
@@ -70,6 +73,61 @@
     <div class="container">
       <div class="row">
         <div id="users" class="col-xs-12">
+          <div class="modal fade" id="confirmDeleteModal" aria-labelledby="confirmar exclusão" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Deletar Emprestimo</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Deseja realmente deletar esse emprestimo?<br>
+                  <b>Essa ação não pode ser desfeita!</b>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                    id="confirm-delete">Apagar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="edition-modal" tabindex="-1" aria-labelledby="editar informações"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalLabel">Editar informações</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="mb-3">
+                      <label for="amiguinho" class="col-form-label">Amiguinho</label>
+                      <select id="amiguinho" class="form-select" required></select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="revista" class="col-form-label">Revista</label>
+                      <select id="revista" class="form-select" required></select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="data-emprestimo" class="col-form-label">Entrega</label>
+                      <input type="date" class="form-control" id="data-emprestimo">
+                    </div>
+                    <div class="mb-3">
+                      <label for="data-devolucao" class="col-form-label">Devolução</label>
+                      <input type="date" class="form-control" id="data-devolucao">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirm-edition">Atualizar
+                    dados</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="filter-group row">
             <div class="form-group col-xs-12 col-sm-12 col-md-4">
               <input type="text" class="search form-control" placeholder="Search">
@@ -82,6 +140,10 @@
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+</body>
 </body>
 
 </html>

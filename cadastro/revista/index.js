@@ -17,7 +17,7 @@
         collectionNumber.value = "";
         type.value = "";
 
-        showSwal((magazineRefId) ? 'success-message' : 'error-message');
+        showSwal((magazineRefId) ? 'success-message' : 'error-message', 'Revista Cadastrada!');
         
     });
 

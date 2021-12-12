@@ -20,7 +20,7 @@
         loanDate.value = "";
         returnDate.value = "";
 
-        showSwal((loanRefId) ? 'success-message' : 'error-message');
+        showSwal((loanRefId) ? 'success-message' : 'error-message', 'Emprestimo Cadastrado!');
         
     });
 

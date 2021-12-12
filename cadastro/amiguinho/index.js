@@ -20,7 +20,7 @@
         address.value = "";
         birthday.value = "";
 
-        showSwal((friendDocId) ? 'success-message' : 'error-message');
+        showSwal((friendDocId) ? 'success-message' : 'error-message', 'Amiguinho Cadastrado!');
         
     });
 })();

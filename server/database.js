@@ -151,7 +151,7 @@ class Database {
                     })
                         .then(() => {
                             console.log('stored in box ' + storedBoxNumber);
-                            resolve(docRef);
+                            resolve(1);
                         })
                         .catch((error) => {
                             console.log('error to update maganize into box');
@@ -218,86 +218,86 @@ class Database {
     }
 
     update_friend(docId, ...userData) {
-        const [name, motherName, motherPhone, address, birthday] = userData;
-
-        this.isEqualFriends(name, motherName).then(({ exists }) => {
-            if (exists) {
-                this.db.collection("amiguinho").doc(docId).update({
-                    'nome_amiguinho': name,
-                    'nome_mae': motherName,
-                    'telefone_mae': motherPhone,
-                    'endereco': address,
-                    'aniversario_amiguinho': Number.parseInt(birthday)
+        return new Promise((resolve, reject) => {
+            const [name, motherName, motherPhone, address, birthday] = userData;
+            this.db.collection("amiguinho").doc(docId).update({
+                'nome_amiguinho': name,
+                'nome_mae': motherName,
+                'telefone_mae': motherPhone,
+                'endereco': address,
+                'aniversario_amiguinho': Number.parseInt(birthday)
+            })
+                .then(() => {
+                    this.successFc();
+                    resolve(1);
                 })
-                    .then((docRef) => {
-                        console.log("Document written with ID: ", docRef.id);
-                        this.successFc();
-                    })
-                    .catch((error) => {
-                        console.error("Error adding document: ", error);
-                        this.errorFc();
-                    });
-            } else {
-                console.log('ja existe');
-                this.errorFc();
-            }
-        })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    reject();
+                    this.errorFc();
+                });
+        });
     }
 
     update_magazine(docId, ...magazineData) {
-        const [name, collectionNumber, type, storedBoxNumber, storedBoxId] = magazineData;
+        return new Promise((resolve, reject) => {
+            const [name, collectionNumber, type] = magazineData;
 
-        this.db.collection("revista").doc(docId).update({
-            'nome': name,
-            'categoria': type,
-            'numero_colecao': Number.parseInt(collectionNumber),
-            'caixa': Number.parseInt(storedBoxNumber)
-        })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-                this.successFc();
+            this.db.collection("revista").doc(docId).update({
+                'nome': name,
+                'categoria': type,
+                'numero_colecao': Number.parseInt(collectionNumber),
             })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-                this.errorFc();
-            });
+                .then(() => {
+                    this.successFc();
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    this.errorFc();
+                });
+        });
     }
 
     update_box(docId, ...boxData) {
-        const [color, tags, storedMagazines] = boxData;
+        return new Promise((resolve, reject) => {
+            const [color, tags] = boxData;
 
-        this.db.collection("caixa").doc(docId).update({
-            'cor': color,
-            'etiquetas': tags,
-            'revistas_guardadas': storedMagazines
-        })
-            .then((docRef) => {
-                console.log("Document updated");
-                this.successFc();
+            this.db.collection("caixa").doc(docId).update({
+                'cor': color,
+                'etiquetas': tags,
             })
-            .catch((error) => {
-                console.error("Error updating document ", error);
-                this.errorFc();
-            });
+                .then(() => {
+                    console.log("Document updated");
+                    this.successFc();
+                    resolve(true);
+                })
+                .catch((error) => {
+                    console.error("Error updating document ", error);
+                    this.errorFc();
+                    reject();
+                });
+        });
     }
 
     update_loan(docId, ...loanData) {
-        const [friendId, magazineId, loanDate, returnDate] = loanData;
+        return new Promise((resolve, reject) => {
+            const [friendId, magazineId, loanDate, returnDate] = loanData;
 
-        this.db.collection("emprestimos").doc(docId).update({
-            'amiguinho': friendId,
-            'revistas': {
-                'revista': magazineId,
-                'data_emprestimo': loanDate,
-                'data_devolucao': returnDate
-            }
-        })
-            .then((docRef) => {
-                this.successFc();
+            this.db.collection("emprestimos").doc(docId).update({
+                'amiguinho': friendId,
+                'revistas': {
+                    'revista': magazineId,
+                    'data_emprestimo': loanDate,
+                    'data_devolucao': returnDate
+                }
             })
-            .catch((error) => {
-                this.errorFc();
-            });
+                .then((docRef) => {
+                    this.successFc();
+                })
+                .catch((error) => {
+                    this.errorFc();
+                });
+        });
     }
 
     deleteDocument(collection, docId) {
@@ -333,7 +333,7 @@ class Database {
                     console.log("Error getting documents: ", error);
                     reject();
                 });
-        })
+        });
     }
 
     deleteMagazine(docId) {
@@ -358,8 +358,7 @@ class Database {
     deleteLoan(docId) {
         return new Promise(async (resolve, reject) => {
             const success = await this.deleteDocument('emprestimos', docId);
-            if (success) resolve(1);
-            else reject(0);
+            resolve(success);
         });
     }
 
@@ -368,7 +367,6 @@ class Database {
             const storedMagazines = await this.db.collection('caixa').doc(docId)
                 .get()
                 .then((querySnapshot) => {
-                    console.log(querySnapshot.data());
                     return (querySnapshot.data()).revistas_guardadas;
                 })
                 .catch(error => {
